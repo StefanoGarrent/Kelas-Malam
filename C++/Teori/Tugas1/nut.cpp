@@ -47,8 +47,10 @@ void inputData() {
     }
 
     fclose(file);
-    cout << "\n[ Data berhasil disimpan ke " << namaFile << " ]\n";
-    cout << "Tekan enter untuk kembali ke menu...";
+    cout << "\n======================================\n";
+    cout << "Data berhasil disimpan ke " << namaFile << "";
+    cout << "\n======================================\n";
+    cout << "\nTekan enter untuk kembali ke menu...";
     cin.ignore();
     cin.get();
     system("cls");
@@ -83,7 +85,157 @@ void tampilData() {
 
     fclose(file);
     cout << "================================\n";
-    cout << "Tekan enter untuk kembali ke menu...";
+    cout << "\nTekan enter untuk kembali ke menu...";
+    cin.ignore();
+    cin.get();
+    system("cls");
+}
+
+void sequentialSearchFile() {
+    string namaFile, nimCari;
+    bool ulangi = true;
+    char pilKembali;
+    do
+    {
+        system("cls");
+        cout << "=================\n";
+        cout << "SEQUENTIAL SEARCH\n";
+        cout << "=================\n";
+    
+        cout << "\nMasukkan nama file yang ingin dicari: "; cin >> namaFile;
+        cout << "\nMasukkan NIM yang ingin dicari: "; cin >> nimCari;
+    
+        FILE *file = fopen(namaFile.c_str(), "r");
+        if (file == NULL) {
+            cout << "\n====================================================================================\n";
+            cout << "File " << namaFile << " belum ada atau kosong! Silakan input data terlebih dahulu.";
+            cout << "\n====================================================================================\n";
+            cout << "Tekan enter untuk kembali ke menu...";
+            cin.ignore();
+            cin.get();
+            system("cls");
+            return;
+        }
+    
+        char buffer[256];
+        bool found = false;
+    
+        while (fgets(buffer, sizeof(buffer), file)) {
+            string line(buffer);
+            size_t pos = line.find(nimCari);
+            if (pos != string::npos) {
+                cout << "\nData ditemukan:\n";
+                cout << "================================\n";
+                cout << "    NIM    | Kelas |     IPK    \n";
+                cout << "================================\n";
+                cout << line;
+                cout << "================================\n";
+                found = true;
+                break;
+            }
+        }
+    
+        if (!found) {
+            cout << "\n===================================================================\n";    
+            cout << "NIM " << nimCari << " tidak ditemukan dalam file " << namaFile << ".";
+            cout << "\n===================================================================\n";    
+        }
+
+        fclose(file);
+
+        cout << "\nApakah Anda ingin mencari NIM lain? (y/n): "; cin >> pilKembali;
+        if (pilKembali == 'y' || pilKembali == 'Y') {
+            ulangi = true;
+        } else {
+            ulangi = false;
+        }
+
+    } while (ulangi == true);
+    
+
+    cout << "\nTekan enter untuk kembali ke menu...";
+    cin.ignore();
+    cin.get();
+    system("cls");
+}
+
+void bubbleSortFile() {
+    string namaFile;
+    cout << "===================\n";
+    cout << "BUBBLE SORTING\n";
+    cout << "===================\n";
+    
+    cout << "\nMasukkan nama file yang ingin diurutkan: "; cin >> namaFile;
+    cout << "\n";
+
+    FILE *file = fopen(namaFile.c_str(), "r");
+    if (file == NULL) {
+        cout << "File " << namaFile << " belum ada atau kosong! Silakan input data terlebih dahulu.\n";
+        cout << "Tekan enter untuk kembali ke menu...";
+        cin.ignore();
+        cin.get();
+        system("cls");
+        return;
+    }
+
+    struct Data {
+        string nim;
+        string kelas;
+        string ipk;
+    };
+
+    Data dataArray[10];
+    int count = 0;
+    char buffer[256];
+
+    // Baca semua data ke array terlebih dahulu
+    while (fgets(buffer, sizeof(buffer), file) && count < 10) {
+        char nim[50], kelas[50], ipk[50];
+        if (sscanf(buffer, "%s %s %s", nim, kelas, ipk) == 3) {
+            dataArray[count].nim = nim;
+            dataArray[count].kelas = kelas;
+            dataArray[count].ipk = ipk;
+            count++;
+        }
+    }
+
+    fclose(file);
+
+    // Tampilkan data sebelum diurutkan dari array
+    cout << "Data dalam '" << namaFile << "' sebelum diurutkan:\n";
+    cout << "================================\n";
+    cout << "    NIM    | Kelas |     IPK    \n";
+    cout << "================================\n";
+    for (int i = 0; i < count; i++) {
+        cout << " " << dataArray[i].nim << "     " << dataArray[i].kelas << "        " << dataArray[i].ipk << "\n";
+    }
+    cout << "================================\n";
+
+    cout << "\nTekan enter untuk melanjutkan ke proses sorting...";
+    cin.ignore();
+    cin.get();
+
+    // Bubble sort berdasarkan NIM
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++) {
+            if (dataArray[j].nim > dataArray[j + 1].nim) {
+                swap(dataArray[j], dataArray[j + 1]);
+            }
+        }
+    }
+
+    cout << "\nData setelah diurutkan berdasarkan NIM:\n";
+    cout << "================================\n";
+    cout << "    NIM    | Kelas |     IPK    \n";
+    cout << "================================\n";
+    
+    for (int i = 0; i < count; i++) {
+        cout << " " << dataArray[i].nim << "     " << dataArray[i].kelas << "        " << dataArray[i].ipk << "\n";
+    }
+    
+    cout << "================================\n";
+    
+    cout << "\nTekan enter untuk kembali ke menu...";
     cin.ignore();
     cin.get();
     system("cls");
@@ -124,11 +276,11 @@ int main() {
                 break;
             case 3:
                 system("cls");
-                // SEARCHING functionality would go here
+                sequentialSearchFile();
                 break;
             case 4:
                 system("cls");
-                // SORTING functionality would go here
+                bubbleSortFile();
                 break;
             case 5:
                 system("cls");
