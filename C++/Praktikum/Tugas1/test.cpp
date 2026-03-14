@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <iomanip>
 
 using namespace std;
 
@@ -28,45 +29,45 @@ void muatData(Film arr[], int &counter) {
     fclose(file);
 }
 
-// Fungsi untuk Save Data ke File
 void simpanData(Film arr[], int counter) {
     FILE *file = fopen("netfilm_db.txt", "w");
     if (file == NULL) {
-        printf("[!] Gagal membuka file untuk menyimpan data.\n");
+        cout << "[!] Gagal membuka file untuk menyimpan data." << endl;
         return;
     }
     for (int i = 0; i < counter; i++) {
-        // Menyimpan dengan delimiter ';'
         fprintf(file, "%s;%.0f;%d;%.1f\n", arr[i].judul, arr[i].harga, arr[i].tahun, arr[i].rating);
     }
     fclose(file);
-    printf("[ SUCCESS ] Data berhasil disinkronkan ke netfilm_db.txt\n");
+    cout << "[ SUCCESS ] Data berhasil disinkronkan ke netfilm_db.txt" << endl;
 }
-
-// --- FUNGSI UTILITIES & TAMPILAN ---
 
 void displayFilms(Film arr[], int counter) {
     if (counter == 0) {
-        printf("\n[!] Katalog masih kosong.\n");
+        cout << "\n[!] Katalog masih kosong." << endl;
         return;
     }
-    printf("\nNETFLIX CONTENT KATALOG\n");
-    printf("=========================================================================\n");
-    printf("%-5s | %-35s | %-12s | %-5s | %-6s\n", "ID", "judul FILM", "LISENSI", "TAHUN", "RATING");
-    printf("-------------------------------------------------------------------------\n");
+    cout << "\nNETFLIX CONTENT KATALOG" << endl;
+    cout << "=========================================================================" << endl;
+    cout << left << setw(5) << "ID" << " | "
+         << setw(35) << "JUDUL FILM" << " | "
+         << setw(12) << "LISENSI" << " | "
+         << setw(5) << "TAHUN" << " | "
+         << setw(6) << "RATING" << endl;
+    cout << "-------------------------------------------------------------------------" << endl;
     for (int i = 0; i < counter; i++) {
-        printf("[%d]   | %-35s | Rp %-9.0lf | %-5d | %.1lf\n", i + 1, arr[i].judul, arr[i].harga, arr[i].tahun, arr[i].rating);
+        cout << "[" << (i + 1) << "]   | "
+             << left << setw(35) << arr[i].judul << " | Rp "
+             << setw(9) << fixed << setprecision(0) << arr[i].harga << " | "
+             << setw(5) << arr[i].tahun << " | "
+             << fixed << setprecision(1) << arr[i].rating << endl;
     }
-    printf("=========================================================================\n");
+    cout << "=========================================================================" << endl;
 }
 
-// --- FUNGSI SORTING ---
-
-// 1. Bubble Sort (Berdasarkan judul A-Z)
 void bubbleSort(Film arr[], int counter) {
     for (int i = 0; i < counter - 1; i++) {
         for (int j = 0; j < counter - i - 1; j++) {
-            // Membandingkan string judul
             if (strcmp(arr[j].judul, arr[j + 1].judul) > 0) {
                 Film temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -74,10 +75,9 @@ void bubbleSort(Film arr[], int counter) {
             }
         }
     }
-    printf("\n[!] Katalog berhasil diurutkan berdasarkan Abjad (A-Z).\n");
+    cout << "\n[!] Katalog berhasil diurutkan berdasarkan Abjad (A-Z)." << endl;
 }
 
-// 2. Quick Sort (Berdasarkan Rating Tertinggi - Descending)
 void swapFilm(Film* a, Film* b) {
     Film t = *a;
     *a = *b;
@@ -89,7 +89,7 @@ int partition(Film arr[], int low, int high) {
     int i = (low - 1);
     
     for (int j = low; j <= high - 1; j++) {
-        if (arr[j].rating > pivot) { // Descending (> pivot)
+        if (arr[j].rating > pivot) { 
             i++;
             swapFilm(&arr[i], &arr[j]);
         }
@@ -106,31 +106,29 @@ void quickSort(Film arr[], int low, int high) {
     }
 }
 
-// --- FUNGSI SEARCHING ---
-
-// 1. Linear Search (Pencarian Parsial/Keyword berdasarkan judul)
 void linearSearch(Film arr[], int counter) {
+    system("cls");
     char keyword[255];
-    printf("\nKeyword judul: ");
-    scanf(" %[^\n]s", keyword); // Membaca string dengan spasi
+    cout << "\nKeyword judul: ";
+    scanf(" %[^\n]s", keyword); 
     
     bool found = false;
     for (int i = 0; i < counter; i++) {
-        // strstr mencari substring di dalam string
         if (strstr(arr[i].judul, keyword) != NULL) {
-            printf("[FOUND] %s (%d) - Rating: %.1lf\n", arr[i].judul, arr[i].tahun, arr[i].rating);
+            cout << "[FOUND] " << arr[i].judul << " (" << arr[i].tahun
+                 << ") - Rating: " << fixed << setprecision(1) << arr[i].rating << endl;
             found = true;
         }
     }
     if (!found) {
-        printf("[!] Film tidak ditemukan.\n");
+        cout << "[!] Film tidak ditemukan." << endl;
     }
 }
 
-// 2. Binary Search (Pencarian Exact berdasarkan judul, data wajib terurut A-Z)
 void binarySearch(Film arr[], int counter) {
+    system("cls");
     char keyword[255];
-    printf("\njudul Lengkap (Exact): ");
+    cout << "\njudul Lengkap (Exact): ";
     scanf(" %[^\n]s", keyword);
     
     int left = 0, right = counter - 1;
@@ -140,21 +138,46 @@ void binarySearch(Film arr[], int counter) {
         int mid = left + (right - left) / 2;
         int res = strcmp(arr[mid].judul, keyword);
         
-        if (res == 0) { // Cocok
-            printf("[FOUND] %s (%d) - Rating: %.1lf\n", arr[mid].judul, arr[mid].tahun, arr[mid].rating);
+        if (res == 0) { 
+            cout << "[FOUND] " << arr[mid].judul << " (" << arr[mid].tahun
+                 << ") - Rating: " << fixed << setprecision(1) << arr[mid].rating << endl;
             found = true;
             break;
         }
-        if (res < 0) { // keyword lebih besar (abjad setelahnya)
+        if (res < 0) { 
             left = mid + 1;
-        } else { // keyword lebih kecil
+        } else { 
             right = mid - 1;
         }
     }
     
     if (!found) {
-        printf("[!] judul tidak ditemukan. Pastikan data sudah di-sort A-Z.\n");
+        cout << "[!] judul tidak ditemukan. Pastikan data sudah di-sort A-Z." << endl;
     }
+}
+
+void tambahFilm(Film arr[], int &counter) {
+    if (counter >= MAX_FILM) {
+        cout << "\n[!] Kapasitas database penuh (Max " << MAX_FILM << " film)." << endl;
+        return;
+    }
+
+    cout << "\nInput judul: ";
+    scanf(" %254[^\n]", arr[counter].judul);
+
+    cout << "Input Harga: ";
+    scanf("%f", &arr[counter].harga);
+
+    cout << "Input Tahun: ";
+    scanf("%d", &arr[counter].tahun);
+
+    cout << "Input Rating: ";
+    scanf("%f", &arr[counter].rating);
+
+    counter++;
+
+    simpanData(arr, counter);
+    cout << "[ SUCCESS ] Film ditambahkan." << endl;
 }
 
 
@@ -166,83 +189,74 @@ int main() {
     muatData(arr, counter);
     
     do {
-        printf("\n=========================================\n");
-        printf("       NETFILM SYSTEM - DASHBOARD\n");
-        printf("=========================================\n");
-        printf("[1] Lihat Katalog Film\n");
-        printf("[2] Urutkan Rating (Quick Sort)\n");
-        printf("[3] Urutkan Abjad  (Bubble Sort)\n");
-        printf("[4] Cari Film (Linear Search)\n");
-        printf("[5] Cari Film (Binary Search)\n");
-        printf("[6] Tambah Film Baru\n");
-        printf("[0] Keluar & Simpan\n");
-        printf("=========================================\n");
-        printf("Pilih Menu > ");
+        system("cls");
+        cout << "\n=========================================" << endl;
+        cout << "       NETFILM SYSTEM - DASHBOARD" << endl;
+        cout << "=========================================" << endl;
+        cout << "[1] Lihat Katalog Film" << endl;
+        cout << "[2] Urutkan Rating (Quick Sort)" << endl;
+        cout << "[3] Urutkan Abjad  (Bubble Sort)" << endl;
+        cout << "[4] Cari Film (Linear Search)" << endl;
+        cout << "[5] Cari Film (Binary Search)" << endl;
+        cout << "[6] Tambah Film Baru" << endl;
+        cout << "[0] Keluar & Simpan" << endl;
+        cout << "=========================================" << endl;
+        cout << "Pilih Menu > ";
         
         if (scanf("%d", &choice) != 1) {
-            printf("Input tidak valid. Keluar dari program.\n");
+            cout << "Input tidak valid. Keluar dari program." << endl;
             break;
         }
 
         switch (choice) {
             case 1:
+                system("cls");
                 displayFilms(arr, counter);
                 break;
             case 2:
+                system("cls");
                 if (counter > 0) {
                     quickSort(arr, 0, counter - 1);
-                    printf("\n[!] Katalog berhasil diurutkan berdasarkan Rating Tertinggi.\n");
+                    cout << "\n[!] Katalog berhasil diurutkan berdasarkan Rating Tertinggi." << endl;
                     displayFilms(arr, counter);
                 } else {
-                    printf("\n[!] Katalog kosong.\n");
+                    cout << "\n[!] Katalog kosong." << endl;
                 }
                 break;
             case 3:
+                system("cls");
                 if (counter > 0) {
                     bubbleSort(arr, counter);
                     displayFilms(arr, counter);
                 } else {
-                    printf("\n[!] Katalog kosong.\n");
+                    cout << "\n[!] Katalog kosong." << endl;
                 }
                 break;
             case 4:
+                system("cls");
                 if (counter > 0) linearSearch(arr, counter);
-                else printf("\n[!] Katalog kosong.\n");
+                else cout << "\n[!] Katalog kosong." << endl;
                 break;
             case 5:
+                system("cls");
                 if (counter > 0) binarySearch(arr, counter);
-                else printf("\n[!] Katalog kosong.\n");
+                else cout << "\n[!] Katalog kosong." << endl;
                 break;
             case 6:
-                if (counter < MAX_FILM) {
-                    printf("\nInput judul: ");
-                    scanf(" %[^\n]s", arr[counter].judul);
-                    printf("Input Harga: ");
-                    scanf("%lf", &arr[counter].harga);
-                    printf("Input Tahun: ");
-                    scanf("%d", &arr[counter].tahun);
-                    printf("Input Rating: ");
-                    scanf("%lf", &arr[counter].rating);
-                    
-                    counter++;
-                    
-                    simpanData(arr, counter);
-                    printf("[ SUCCESS ] Film ditambahkan.\n");
-                } else {
-                    printf("\n[!] Kapasitas database penuh (Max %d film).\n", MAX_FILM);
-                }
+                system("cls");
+                tambahFilm(arr, counter);
                 break;
             case 0:
-                printf("\nMenyimpan data...\n");
+                cout << "\nMenyimpan data..." << endl;
                 simpanData(arr, counter);
-                printf("Sistem Offline. Terimakasih!\n");
+                cout << "Sistem Offline. Terimakasih!" << endl;
                 break;
             default:
-                printf("\n[!] Pilihan tidak valid!\n");
+                cout << "\n[!] Pilihan tidak valid!" << endl;
         }
         
         if (choice != 0) {
-            printf("\nTekan Enter untuk melanjutkan...");
+            cout << "\nTekan Enter untuk melanjutkan...";
             while(getchar() != '\n');
             getchar();
         }
