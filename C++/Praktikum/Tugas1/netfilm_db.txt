@@ -1,5 +1,5 @@
 Nenekku Pahlawanku;50000;2019;5.0
+Tom & Jerry;40000;2019;4.7
+Heri poter;30000;2012;4.0
 Aku adalah seorang Kapiten;400000;2001;4.0
 Spiderman Home;100000;2022;4.0
-Heri poter;30000;2012;4.0
-Tom & Jerry;40000;2019;4.7

@@ -1,2 +1,1 @@
-melanjutkan...";
-            while(getchar() != '\n');
+keyword

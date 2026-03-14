@@ -42,27 +42,27 @@ void simpanData(Film arr[], int counter) {
     cout << "[ SUCCESS ] Data berhasil disinkronkan ke netfilm_db.txt" << endl;
 }
 
-void displayFilms(Film arr[], int counter) {
+void tampilKatalog(Film arr[], int counter) {
     if (counter == 0) {
         cout << "\n[!] Katalog masih kosong." << endl;
         return;
     }
-    cout << "\nNETFLIX CONTENT KATALOG" << endl;
-    cout << "=========================================================================" << endl;
-    cout << left << setw(5) << "ID" << " | "
+    cout << "\n N E T F L I X   C O N T E N T   K A T A L O G" << endl;
+    cout << "============================================================================" << endl;
+    cout << left << setw(5) << " ID" << " | "
          << setw(35) << "JUDUL FILM" << " | "
          << setw(12) << "LISENSI" << " | "
          << setw(5) << "TAHUN" << " | "
          << setw(6) << "RATING" << endl;
-    cout << "-------------------------------------------------------------------------" << endl;
+    cout << "----------------------------------------------------------------------------" << endl;
     for (int i = 0; i < counter; i++) {
-        cout << "[" << (i + 1) << "]   | "
+        cout << " [" << (i + 1) << "]  | "
              << left << setw(35) << arr[i].judul << " | Rp "
              << setw(9) << fixed << setprecision(0) << arr[i].harga << " | "
              << setw(5) << arr[i].tahun << " | "
-             << fixed << setprecision(1) << arr[i].rating << endl;
+             << fixed << setprecision(1) << " " << arr[i].rating << endl;
     }
-    cout << "=========================================================================" << endl;
+    cout << "============================================================================" << endl;
 }
 
 void bubbleSort(Film arr[], int counter) {
@@ -75,7 +75,9 @@ void bubbleSort(Film arr[], int counter) {
             }
         }
     }
-    cout << "\n[!] Katalog berhasil diurutkan berdasarkan Abjad (A-Z)." << endl;
+    cout << "=========================================================" << endl;
+    cout << " [!] Katalog berhasil diurutkan berdasarkan Abjad (A-Z). " << endl;
+    cout << "=========================================================" << endl;
 }
 
 void swapFilm(Film* a, Film* b) {
@@ -121,14 +123,16 @@ void linearSearch(Film arr[], int counter) {
         }
     }
     if (!found) {
-        cout << "[!] Film tidak ditemukan." << endl;
+        cout << "===================================================" << endl;
+        cout << " [!] Film tidak ditemukan! Pastikan keyword benar. " << endl;
+        cout << "===================================================" << endl;
     }
 }
 
 void binarySearch(Film arr[], int counter) {
     system("cls");
     char keyword[255];
-    cout << "\njudul Lengkap (Exact): ";
+    cout << "\nJudul Lengkap (Exact): ";
     cin.getline(keyword, sizeof(keyword));
     
     int left = 0, right = counter - 1;
@@ -139,7 +143,7 @@ void binarySearch(Film arr[], int counter) {
         int res = strcmp(arr[mid].judul, keyword);
         
         if (res == 0) { 
-            cout << "[FOUND] " << arr[mid].judul << " (" << arr[mid].tahun
+            cout << "\n[FOUND] " << arr[mid].judul << " (" << arr[mid].tahun
                  << ") - Rating: " << fixed << setprecision(1) << arr[mid].rating << endl;
             found = true;
             break;
@@ -152,13 +156,17 @@ void binarySearch(Film arr[], int counter) {
     }
     
     if (!found) {
-        cout << "[!] judul tidak ditemukan. Pastikan data sudah di-sort A-Z." << endl;
+        cout << "=============================================================" << endl;
+        cout << " [!] Judul tidak ditemukan. Pastikan data sudah di-sort A-Z. " << endl;
+        cout << "=============================================================" << endl;
     }
 }
 
 void tambahFilm(Film arr[], int &counter) {
     if (counter >= MAX_FILM) {
-        cout << "\n[!] Kapasitas database penuh (Max " << MAX_FILM << " film)." << endl;
+        cout << "=============================================================" << endl;
+        cout << " [!] Kapasitas database penuh (Max " << MAX_FILM << " film)." << endl;
+        cout << "=============================================================" << endl;
         return;
     }
 
@@ -191,21 +199,23 @@ int main() {
     
     do {
         system("cls");
-        cout << "\n=========================================" << endl;
-        cout << "       NETFILM SYSTEM - DASHBOARD" << endl;
         cout << "=========================================" << endl;
-        cout << "[1] Lihat Katalog Film" << endl;
-        cout << "[2] Urutkan Rating (Quick Sort)" << endl;
-        cout << "[3] Urutkan Abjad  (Bubble Sort)" << endl;
-        cout << "[4] Cari Film (Linear Search)" << endl;
-        cout << "[5] Cari Film (Binary Search)" << endl;
-        cout << "[6] Tambah Film Baru" << endl;
-        cout << "[0] Keluar & Simpan" << endl;
+        cout << "       NETFILM SYSTEM - DASHBOARD        " << endl;
+        cout << "=========================================" << endl;
+        cout << "  [1] Lihat Katalog Film                 " << endl;
+        cout << "  [2] Urutkan Rating (Quick Sort)        " << endl;
+        cout << "  [3] Urutkan Abjad  (Bubble Sort)       " << endl;
+        cout << "  [4] Cari Film (Linear Search)          " << endl;
+        cout << "  [5] Cari Film (Binary Search)          " << endl;
+        cout << "  [6] Tambah Film Baru                   " << endl;
+        cout << "  [0] Keluar & Simpan                    " << endl;
         cout << "=========================================" << endl;
         cout << "Pilih Menu > ";
         
         if (!(cin >> choice)) {
-            cout << "Input tidak valid. Keluar dari program." << endl;
+            cout << "============================================" << endl;
+            cout << " [!] Input tidak valid. Keluar dari program." << endl;
+            cout << "============================================" << endl;
             break;
         }
         cin.ignore();
@@ -213,48 +223,69 @@ int main() {
         switch (choice) {
             case 1:
                 system("cls");
-                displayFilms(arr, counter);
+                tampilKatalog(arr, counter);
                 break;
             case 2:
                 system("cls");
                 if (counter > 0) {
                     quickSort(arr, 0, counter - 1);
-                    cout << "\n[!] Katalog berhasil diurutkan berdasarkan Rating Tertinggi." << endl;
-                    displayFilms(arr, counter);
+                    cout << "==============================================================" << endl;
+                    cout << " [!] Katalog berhasil diurutkan berdasarkan Rating Tertinggi. " << endl;
+                    cout << "==============================================================" << endl;
+                    tampilKatalog(arr, counter);
                 } else {
-                    cout << "\n[!] Katalog kosong." << endl;
+                    cout << "=====================" << endl;
+                    cout << " [!] Katalog kosong." << endl;
+                    cout << "=====================" << endl;
                 }
                 break;
             case 3:
                 system("cls");
                 if (counter > 0) {
                     bubbleSort(arr, counter);
-                    displayFilms(arr, counter);
+                    tampilKatalog(arr, counter);
                 } else {
-                    cout << "\n[!] Katalog kosong." << endl;
+                    cout << "=====================" << endl;
+                    cout << " [!] Katalog kosong." << endl;
+                    cout << "=====================" << endl;
                 }
                 break;
             case 4:
                 system("cls");
                 if (counter > 0) linearSearch(arr, counter);
-                else cout << "\n[!] Katalog kosong." << endl;
+                else {
+                    cout << "=====================" << endl;
+                    cout << " [!] Katalog kosong." << endl;
+                    cout << "=====================" << endl;
+                }
                 break;
             case 5:
                 system("cls");
                 if (counter > 0) binarySearch(arr, counter);
-                else cout << "\n[!] Katalog kosong." << endl;
+                else {
+                    cout << "=====================" << endl;
+                    cout << " [!] Katalog kosong." << endl;
+                    cout << "=====================" << endl;
+                }
                 break;
             case 6:
                 system("cls");
                 tambahFilm(arr, counter);
                 break;
             case 0:
+                system("cls");
                 cout << "\nMenyimpan data..." << endl;
                 simpanData(arr, counter);
                 cout << "Sistem Offline. Terimakasih!" << endl;
+                cout << "============================" << endl;
+                cout << "Enter untuk keluar...";
+                cin.get();
                 break;
             default:
-                cout << "\n[!] Pilihan tidak valid!" << endl;
+                system("cls");
+                cout << "==========================" << endl;
+                cout << " [!] Pilihan tidak valid!" << endl;
+                cout << "==========================" << endl;
         }
         
         if (choice != 0) {
