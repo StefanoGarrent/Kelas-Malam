@@ -1,7 +1,7 @@
 #include <iostream>
-#include <cstdio>
+#include <stdlib.h>
+#include <stdio.h>
 #include <cstring>
-#include <cstdlib>
 #include <iomanip>
 
 using namespace std;
@@ -110,7 +110,7 @@ void linearSearch(Film arr[], int counter) {
     system("cls");
     char keyword[255];
     cout << "\nKeyword judul: ";
-    scanf(" %[^\n]s", keyword); 
+    cin.getline(keyword, sizeof(keyword));
     
     bool found = false;
     for (int i = 0; i < counter; i++) {
@@ -129,7 +129,7 @@ void binarySearch(Film arr[], int counter) {
     system("cls");
     char keyword[255];
     cout << "\njudul Lengkap (Exact): ";
-    scanf(" %[^\n]s", keyword);
+    cin.getline(keyword, sizeof(keyword));
     
     int left = 0, right = counter - 1;
     bool found = false;
@@ -163,16 +163,17 @@ void tambahFilm(Film arr[], int &counter) {
     }
 
     cout << "\nInput judul: ";
-    scanf(" %254[^\n]", arr[counter].judul);
+    cin.getline(arr[counter].judul, sizeof(arr[counter].judul));
 
     cout << "Input Harga: ";
-    scanf("%f", &arr[counter].harga);
+    cin >> arr[counter].harga;
 
     cout << "Input Tahun: ";
-    scanf("%d", &arr[counter].tahun);
+    cin >> arr[counter].tahun;
 
     cout << "Input Rating: ";
-    scanf("%f", &arr[counter].rating);
+    cin >> arr[counter].rating;
+    cin.ignore();
 
     counter++;
 
@@ -203,10 +204,11 @@ int main() {
         cout << "=========================================" << endl;
         cout << "Pilih Menu > ";
         
-        if (scanf("%d", &choice) != 1) {
+        if (!(cin >> choice)) {
             cout << "Input tidak valid. Keluar dari program." << endl;
             break;
         }
+        cin.ignore();
 
         switch (choice) {
             case 1:
@@ -257,8 +259,7 @@ int main() {
         
         if (choice != 0) {
             cout << "\nTekan Enter untuk melanjutkan...";
-            while(getchar() != '\n');
-            getchar();
+            cin.get();
         }
 
     } while (choice != 0);
